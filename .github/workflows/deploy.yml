@@ -1,0 +1,43 @@
+name: Deploy Flask App to ECS
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the `main` branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Step 4: Build and Push Docker Image to ECR
+      - name: Build and Push Docker Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: flask-app
+          IMAGE_TAG: latest
+        run: |
+          docker buildx build --platform linux/amd64 -t 565393038404.dkr.ecr.us-east-1.amazonaws.com/flask-app:latest .
+          docker push 565393038404.dkr.ecr.us-east-1.amazonaws.com/flask-app:latest
+
+      # Step 5: Deploy to Amazon ECS
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          cluster: my-ecs-cluster
+          service: flask-app-service
+          task-definition: ecs_task_definition.json
+          wait-for-service-stability: true
