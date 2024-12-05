@@ -41,7 +41,7 @@ jobs:
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: my-ecs-cluster
+          cluster: changsathien-ecs-cluster
           service: flask-app-service
           task-definition: ecs_task_definition.json
           wait-for-service-stability: true
