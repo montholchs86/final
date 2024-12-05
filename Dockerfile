@@ -11,10 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code into the container
-COPY app.py .
+COPY . .
 
 # Expose the port the app runs on
 EXPOSE 4000
 
-# Run the Flask app
-CMD ["python", "app.py"]
+# Command to run the app using Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "app:app"]
