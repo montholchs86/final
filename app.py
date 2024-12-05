@@ -8,7 +8,7 @@ ip_address = socket.gethostbyname(hostname)
 
 @app.route('/')
 def hello_cloud():
-    return 'Welcome to Changasathien Final Test API Server'
+    return 'Welcome to Changasathien Final Test API Server.'
 
 
 @app.route('/host')
