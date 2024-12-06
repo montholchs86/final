@@ -11,7 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code into the container
-COPY . .
+COPY . /app
 
 # Expose the port the app runs on
 EXPOSE 4000
+
+# Command to run the application using Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "app:app"]
