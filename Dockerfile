@@ -15,6 +15,3 @@ COPY . .
 
 # Expose the port the app runs on
 EXPOSE 4000
-
-# Command to run the app using Gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "app:app"]
